@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F4D3E2C1CF5715200627B7C /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4D3E2B1CF5715200627B7C /* libsqlite3.tbd */; };
 		4F5B28BD1CCA001000930135 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B28BC1CCA001000930135 /* main.m */; };
 		4F5B28C01CCA001000930135 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B28BF1CCA001000930135 /* AppDelegate.m */; };
 		4F5B28CB1CCA001000930135 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F5B28CA1CCA001000930135 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F4D3E2B1CF5715200627B7C /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		4F5B28B81CCA001000930135 /* DBManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F5B28BC1CCA001000930135 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4F5B28BE1CCA001000930135 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F4D3E2C1CF5715200627B7C /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +91,7 @@
 		4F5B28AF1CCA001000930135 = {
 			isa = PBXGroup;
 			children = (
+				4F4D3E2B1CF5715200627B7C /* libsqlite3.tbd */,
 				4F5B28BA1CCA001000930135 /* DBManager */,
 				4F5B28D71CCA001000930135 /* DBManagerTests */,
 				4F5B28E21CCA001000930135 /* DBManagerUITests */,
@@ -512,6 +516,7 @@
 				4F5B28EA1CCA001000930135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4F5B28EB1CCA001000930135 /* Build configuration list for PBXNativeTarget "DBManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -520,6 +525,7 @@
 				4F5B28ED1CCA001000930135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4F5B28EE1CCA001000930135 /* Build configuration list for PBXNativeTarget "DBManagerUITests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +534,7 @@
 				4F5B28F01CCA001000930135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

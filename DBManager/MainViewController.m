@@ -9,8 +9,8 @@
 #import "MainViewController.h"
 #import "DBManager.h"
 
-static NSString * const tableName = @"DemoTb";
-static NSString * const dbName = @"DemoDb.db";
+static NSString * const tableName = @"Doubixiaoqi";
+static NSString * const dbName = @"dbName.db";
 
 @interface MainViewController ()
 
@@ -39,16 +39,21 @@ static NSString * const dbName = @"DemoDb.db";
 }
 
 - (void)touch:(UIButton *)button {
+//    NSArray *infoArray = @[@"id INTEGER PRIMARY KEY ASC",
+//                           @"type INTEGER",
+//                           @"content",
+//                           @"time INTEGER"];
+//    DBManager *sqlight = [DBManager databaseFromName:dbName tableName:tableName infoArray:infoArray];
     if (button.tag == 1000) {
-            NSArray *infoArray = @[@"id INTEGER PRIMARY KEY ASC",
-                                   @"type INTEGER",
-                                   @"content",
-                                   @"time INTEGER"];
-            DBManager *sqlight = [[DBManager alloc] initWithDatabaseName:dbName];
-            [sqlight createTableWithName:tableName infoArray:infoArray];
-            sqlight.tableName = tableName;
+        // 初始化并且建立表
+        NSArray *infoArray = @[@"id INTEGER PRIMARY KEY ASC",
+                               @"type INTEGER",
+                               @"content",
+                               @"time INTEGER"];
+        [DBManager databaseFromName:dbName tableName:tableName infoArray:infoArray];
     } else if (button.tag == 1001) {
         _count++;
+        //获取DBManager
         DBManager *sqlight = [DBManager databaseFromName:dbName tableName:tableName];
         
         NSString *type = [NSString stringWithFormat:@"%ld", _count];
@@ -90,6 +95,8 @@ static NSString * const dbName = @"DemoDb.db";
         
         NSLog(@"查：msg:%@ code:%ld data:%@", result.msg, result.code, result.dataArray);
     }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

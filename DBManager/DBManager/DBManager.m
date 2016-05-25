@@ -12,11 +12,22 @@
 
 @property (nonatomic, strong) NSString *databaseName;
 
-@property (strong, nonatomic) DBStore *dbStore;
+@property (nonatomic, strong) NSString *tableName;
+
+@property (nonatomic, strong) DBStore *dbStore;
 
 @end
 
 @implementation DBManager
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        NSAssert(NO, @"+ (id)databaseFromName:(NSString *)databaseName，或者+ (id)databaseFromName:(NSString *)databaseName tableName:(NSString *)tableName初始化");
+    }
+    return self;
+}
+
 #pragma mark - 初始化
 - (id)initWithDatabaseName:(NSString *)databaseName {
     self = [super init];
@@ -27,34 +38,30 @@
     return self;
 }
 
-- (id)initWithDatabaseName:(NSString *)databaseName tableName:(NSString *)tableName {
-    self = [[DBManager alloc] initWithDatabaseName:databaseName];
-    if (self) {
-        self.tableName = tableName;
-        DBData *dbData = [self selectWithTypeArray:[NSMutableArray arrayWithObjects:@"1", nil] where:@"" bindArray:nil];
-        if (SQLITE_DONE != dbData.code) {
-            return nil;
-        }
-    }
-    return self;
-}
-
 #pragma mark - 从文件名或者表名和文件名获取表
-+ (id)databaseFromName:(NSString *)databaseName {
++ (id)databaseFromName:(NSString *)databaseName tableName:(NSString *)tableName infoArray:(NSArray *)infoArray {
     static dispatch_once_t once_token;
     static NSMutableDictionary *handlePool;
     dispatch_once(&once_token, ^{
         handlePool = [[NSMutableDictionary alloc] init];
     });
     
-    if ([[handlePool allKeys] containsObject:databaseName] && [handlePool objectForKey:databaseName]) {
-    } else {
+    NSString *token = [databaseName stringByAppendingPathExtension:tableName];
+    if (![[handlePool allKeys] containsObject:token] || [handlePool objectForKey:token] == nil) {
         DBManager *manager = [[DBManager alloc] initWithDatabaseName:databaseName];
-        [handlePool setValue:manager forKey:databaseName];
+        [manager setTableName:tableName];
+        [manager createTableWithName:tableName infoArray:infoArray];
+        DBData *daData = [manager selectWithTypeArray:[NSMutableArray arrayWithObjects:@"1", nil] where:@"" bindArray:nil];
+        if (SQLITE_DONE == daData.code) {
+            [handlePool setValue:manager forKey:token];
+        } else {
+            return nil;
+        }
     }
-    return [handlePool objectForKey:databaseName];
+    return [handlePool objectForKey:token];
 }
 
+#pragma mark - 获取DB
 + (id)databaseFromName:(NSString *)databaseName tableName:(NSString *)tableName {
     static dispatch_once_t once_token;
     static NSMutableDictionary *handlePool;
@@ -113,8 +120,7 @@
 }
 
 #pragma mark - 删
-- (DBData *)deleteWhere:(NSString *)condition
-              bindArray:(NSMutableArray *)bindArray {
+- (DBData *)deleteWhere:(NSString *)condition bindArray:(NSMutableArray *)bindArray {
     
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
     
@@ -125,9 +131,7 @@
     return [self excuteSQL:sql bindArray:bindArray];
 }
 
-- (DBData *)selectWithTypeArray:(NSArray *)typeArray
-                          where:(NSString *)condition
-                      bindArray:(NSArray *)bindArray {
+- (DBData *)selectWithTypeArray:(NSArray *)typeArray where:(NSString *)condition bindArray:(NSArray *)bindArray {
     NSString *fieldsString = @"";
     for (int i = 0; i < [typeArray count]; i ++) {
         fieldsString = [fieldsString stringByAppendingString:[typeArray objectAtIndex:i]];
@@ -143,9 +147,7 @@
 }
 
 #pragma mark - 改
-- (DBData *)updateDataDic:(NSDictionary *)dataDic
-                    where:(NSString *)condition
-                bindArray:(NSArray *)bindArray {
+- (DBData *)updateDataDic:(NSDictionary *)dataDic where:(NSString *)condition bindArray:(NSArray *)bindArray {
     NSArray *keys = [dataDic allKeys];
     NSMutableArray *newBind = [[NSMutableArray alloc] init];
     NSString *fields = @"";
@@ -165,8 +167,7 @@
     return [self.dbStore querySql:sql bindArray:newBind];
 }
 
-- (DBData *)excuteSQL:(NSString *)aSQL
-            bindArray:(NSArray *)bindArray {
+- (DBData *)excuteSQL:(NSString *)aSQL bindArray:(NSArray *)bindArray {
     if (nil == bindArray || 0 >= [bindArray count]) {
         return [self.dbStore querySql:aSQL];
     } else {
